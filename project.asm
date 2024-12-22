@@ -43,14 +43,15 @@ move $t2, $v0
  la $a1, userinput 
  jal othertodecimal
  
- move $a0,$v0
- li $v0, 1 
+move $a0,$v0
+li $v0, 1 
 syscall
 
  li $v0, 10 # Exit syscall
  syscall
  othertodecimal:
      li $v0, 0
+     li $t6,0
      li $t3, 0
      move $t4, $a1
      find_length:
@@ -85,13 +86,15 @@ syscall
       addi $t1, $t1, 1          
      j power_loop   
      exist:
-     sub $t3,$t3,1
+     
      
      mul $t9,$t7,$t5
-     add $v0,$v0,$t9
-     j main_loop
+     add $t6, $t6, $t9
+     sub $t3,$t3,1
+     bgez $t3, main_loop   
      
     exx: 
+     move $v0, $t6   
      jr $ra 
   
      
