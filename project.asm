@@ -3,6 +3,7 @@ m1:.asciiz "Enter the current system: "
 m2:.asciiz "\nEnter the number:"
 m3:.asciiz "\nEnter the new system:"
 m4:.asciiz "\nThe number in the new system:"
+m5:.asciiz "\n the number doesnot belong to the current system "
 userinput:.space 20
 
 .text
@@ -38,7 +39,33 @@ li $v0, 5
 syscall
 move $t2, $v0
 
+#check the input
+la $t4,userinput
+ check_input:
+  lb $t5, 0($t4)     
+   beqz $t5, main_section    
+   addi $t4, $t4, 1  
+   
+    li $t8, '9'  # Load ASCII value of '9'
+    bgt $t5, $t8,check_c
+    sub $t5, $t5, '0'  #convert to integer
+    j check_error
+    check_c:
+     sub $t5, $t5, 'A'
+     addi $t5, $t5, 10 
+    check_error:
+    blt $t5,$t0,check_input
+     
+    end_program:
+     li $v0, 4
+     la $a0, m5
+     syscall
+     
+    li $v0, 10 # Exit syscall
+    syscall
 
+
+main_section:
  move $a0, $t0  
  la $a1, userinput 
  jal othertodecimal
