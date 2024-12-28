@@ -3,10 +3,10 @@ m1:.asciiz "Enter the current system: "
 m2:.asciiz "\nEnter the number:"
 m3:.asciiz "\nEnter the new system:"
 m4:.asciiz "\nThe number in the new system:"
-m5:.asciiz "\n the number doesnot belong to the current system "
+m5:.asciiz "\n the number does not belong to the current system "
 userinput:.space 20
 result_message: .asciiz "The number in the new system is: "
-unsupported_message: .asciiz "Unsupported system. Please choose a base between 2 and 16.\n"
+m6: .asciiz "Unsupported system. Please choose a base between 2 and 16.\n"
 digits: .asciiz "0123456789ABCDEF"
 result_buffer: .space 64  # Buffer to store the converted number
 
@@ -20,6 +20,8 @@ syscall
 li $v0, 5
 syscall
 move $t0, $v0
+blt $t0, 2, invalid_base
+bgt $t0, 16, invalid_base
 
 # Print m2
 li $v0, 4
@@ -42,6 +44,8 @@ syscall
 li $v0, 5
 syscall
 move $t2, $v0
+blt $t2, 2, invalid_base
+bgt $t2, 16, invalid_base
 
 #check the input
 la $t4,userinput
@@ -67,7 +71,12 @@ la $t4,userinput
      
     li $v0, 10 # Exit syscall
     syscall
-
+invalid_base:
+  li $v0, 4
+  la $a0, m6
+  syscall
+  li $v0, 10  # Exit syscall
+  syscall
 
 main_section:
  # Check if the current base is decimal (10)
