@@ -23,22 +23,22 @@ void DecimalToOther(int decimal, int system) {
         i++;
     }
 
-    // Print the result in reverse order
-    printf("Result: ");
     for (int j = i - 1; j >= 0; j--) {
-        printf("%c", result[j]);
+        printf( "%c", result[j] );
     }
-    printf("\n");
 }
 
 int main() {
-    int decimal, system;
-    printf("Enter a decimal number: ");
+    int decimal, system, crr;
+    printf("Enter the current system: ");
+    scanf("%d", &crr);
+    printf("Enter the number: ");
     scanf("%d", &decimal);
-    printf("Enter the system (from 2 to 16): ");
+    printf("Enter the new system: ");
     scanf("%d", &system);
-
+    if(crr==10){
+    printf("the number in the new system is:  ");
     DecimalToOther(decimal, system);
-    
+    }
     return 0;
 }
